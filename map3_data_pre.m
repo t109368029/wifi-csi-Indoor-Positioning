@@ -151,3 +151,36 @@ k=input;
 path = strcat(loc,char(string(k)));
 load(path);
 end
+function [no_ang1,no_ang2,no_ang3,t12,t32] = data_ang(input,loc)
+k=input;
+path = strcat(loc,char(string(k)));
+load(path);
+%
+m=size(csi11);
+no_ang1 = zeros(m(1),m(2));
+no_ang2 = zeros(m(1),m(2));
+no_ang3 = zeros(m(1),m(2));
+for a = 1:m(1)
+    theta_csi11(a,:) = phase(csi11(a,:));
+    theta_csi21(a,:) = phase(csi21(a,:));
+    theta_csi31(a,:) = phase(csi31(a,:));
+    no_ang1(a,:) = nom(theta_csi11(a,:));
+    no_ang2(a,:) = nom(theta_csi21(a,:));
+    no_ang3(a,:) = nom(theta_csi31(a,:));
+end
+t12=theta_csi11-theta_csi21;
+t32=theta_csi31-theta_csi21;
+for i=1:m(1)
+    t12(i,:) = nom(t12(i,:));
+    t32(i,:) = nom(t32(i,:));
+end
+
+random_index = randperm(size(csi11, 1));
+
+no_ang1 = no_ang1(random_index, :);
+no_ang2 = no_ang2(random_index, :);
+no_ang3 = no_ang3(random_index, :);
+t12 = t12(random_index, :);
+t32 = t32(random_index, :);
+
+end%前三資料為天線相位，後二是兩根天線相位差
